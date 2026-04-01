@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
 import { randomBytes, createHmac } from 'node:crypto'
 import { signinPayloadModel, signupPayloadModel } from './models'
-import { db } from './db'
-import { usersTable } from './db/schema'
+import { db } from '../../db'
+import { usersTable } from '../../db/schema'
 import { eq } from 'drizzle-orm'
 import { createUserToken } from './utils/token'
 import type { UserTokenPayload } from './utils/token'
@@ -27,7 +27,7 @@ class AuthenticationController {
         // Step 3: Hash password with salt
         const salt = randomBytes(32).toString('hex')  // unique random salt
         const hash = createHmac('sha256', salt).update(password).digest('hex')
-        //           👆 HMAC uses the salt as the key to hash the password
+        
 
         // Step 4: Save to DB
         const [result] = await db.insert(usersTable).values({
